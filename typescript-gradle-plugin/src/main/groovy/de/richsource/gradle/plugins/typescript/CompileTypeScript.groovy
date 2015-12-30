@@ -52,11 +52,11 @@ public class CompileTypeScript extends SourceTask {
 	@Input @Optional boolean inlineSourceMap
 	@Input @Optional boolean inlineSources
 	@Input String compilerExecutable = Os.isFamily(Os.FAMILY_WINDOWS) ? "cmd /c tsc.cmd" : "tsc"
-	File tsCompilerArgs = File.createTempFile("tsCompiler-", ".args")
+	File tsCompilerArgs
 
 	@TaskAction
 	void compile() {
-		tsCompilerArgs.deleteOnExit()
+		tsCompilerArgs = File.createTempFile("tsCompiler-",".args")
 		
 		logger.info "compiling TypeScript files..."
 		
@@ -151,6 +151,8 @@ public class CompileTypeScript extends SourceTask {
 			executable = exe
 			args = compilerArgs
 		}
+		
+		tsCompilerArgs.delete()
 		
 		logger.info "Done TypeScript compilation."
 	}
